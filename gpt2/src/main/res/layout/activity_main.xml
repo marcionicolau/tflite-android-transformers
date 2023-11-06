@@ -9,6 +9,10 @@
         <variable
             name="vm"
             type="co.huggingface.android_transformers.gpt2.ml.GPT2Client"/>
+
+        <variable
+            name="llm_vm"
+            type="co.huggingface.android_transformers.gpt2.ml.LLMNextWord" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,25 +37,72 @@
             android:id="@+id/autocomplete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:onClick="@{() -> vm.launchAutocomplete()}"
             android:text="Trigger autocomplete"
-            app:layout_constraintTop_toBottomOf="@id/shuffle_button"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:onClick="@{() -> vm.launchAutocomplete()}"/>
+            app:layout_constraintTop_toBottomOf="@id/shuffle_button" />
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="#024CAF50"
+
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/autocomplete_button">
+
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/tokenOption1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:layout_marginLeft="10dp"
+                android:text="Sample 1"
+                android:textSize="18sp"
+                android:onClick="onRadioButtonClicked"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/tokenOption2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:layout_marginLeft="10dp"
+                android:text="Sample 2"
+                android:textSize="18sp"
+                android:onClick="onRadioButtonClicked"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/tokenOption3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:layout_marginLeft="10dp"
+                android:text="Sample 3"
+                android:textSize="18sp"
+                android:onClick="onRadioButtonClicked"/>
+
+
+        </RadioGroup>
 
         <TextView
             android:id="@+id/prompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="10dp"
             android:padding="30dp"
             android:textColor="@color/colorOnPrimary"
             android:textSize="16sp"
             app:completion="@{vm.completion}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/autocomplete_button"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
             app:lineHeight="22sp"
             app:prompt="@{vm.prompt}"
             tools:text="@tools:sample/lorem/random" />

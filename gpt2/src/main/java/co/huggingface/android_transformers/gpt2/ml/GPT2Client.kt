@@ -24,8 +24,12 @@ private const val VOCAB_SIZE       = 50257
 private const val NUM_HEAD         = 12
 private const val NUM_LITE_THREADS = 4
 private const val MODEL_PATH       = "model.tflite"
+//private const val MODEL_PATH       = "gpt2-sm-pt-64.tflite"
+//private const val MODEL_PATH       = "gpt2-sm-pt-64-compact-fp16.tflite"
 private const val VOCAB_PATH       = "gpt2-vocab.json"
+//private const val VOCAB_PATH       = "gpt2-sm-pt-vocab.json"
 private const val MERGES_PATH      = "gpt2-merges.txt"
+//private const val MERGES_PATH      = "gpt2-sm-pt-merges.txt"
 private const val TAG              = "GPT2Client"
 
 private typealias Predictions = Array<Array<FloatArray>>
@@ -44,8 +48,17 @@ class GPT2Client(application: Application) : AndroidViewModel(application) {
         "In a shocking finding, scientist discovered a herd of unicorns living in a remote, previously unexplored valley, in the Andes Mountains. Even more surprising to the researchers was the fact that the unicorns spoke perfect English.",
         "Legolas and Gimli advanced on the orcs, raising their weapons with a harrowing war cry.",
         "Today, scientists confirmed the worst possible outcome: the massive asteroid will collide with Earth",
-        "Hugging Face is a company that releases awesome projects in machine learning because"
+        "Hugging Face is a company that releases awesome projects in machine learning because",
+        "Starting today, the price of gold will increase by 10% due to",
     )
+
+//    private val prompts = arrayOf(
+//        "Este é um teste do gpt2 para fazer receita de",
+//        "A cidade de Passo Fundo/RS é conhecida por",
+//        "Ser aluno de ciência da computação é",
+//        "O chimarrão é uma bebida",
+//        "O halloween no Brasil é comemorado desde"
+//    )
 
     private val _prompt = MutableLiveData(prompts.random())
     val prompt: LiveData<String> = _prompt
@@ -76,7 +89,7 @@ class GPT2Client(application: Application) : AndroidViewModel(application) {
             initJob.join()
             autocompleteJob?.cancelAndJoin()
             _completion.value = ""
-            generate(_prompt.value!!)
+            generate(_prompt.value!!, 1)
         }
     }
 
@@ -133,7 +146,8 @@ class GPT2Client(application: Application) : AndroidViewModel(application) {
             val modelBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, it.startOffset, it.declaredLength)
 
             val opts = Interpreter.Options()
-            opts.setNumThreads(NUM_LITE_THREADS)
+//            opts.setNumThreads(NUM_LITE_THREADS)
+            opts.numThreads = NUM_LITE_THREADS
             return@use Interpreter(modelBuffer, opts)
         }
     }
